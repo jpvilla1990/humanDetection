@@ -16,7 +16,7 @@ class DownloadProgressBar(tqdm):
             self.total = tsize
         self.update(b * bsize - self.n)
 
-class dataloader(object):
+class Dataloader(object):
     
     def __init__(self, category='person'):
         self.__cocoTrainUrl = "http://images.cocodataset.org/zips/train2017.zip"
@@ -28,6 +28,15 @@ class dataloader(object):
         self.__createPaths(category)
 
         self.organizedDatasetByCategory(category)
+
+    def __createFolder(self, folder):
+        """
+            Method to create a folder
+        """
+        try:
+            os.mkdir(folder)
+        except:
+            pass
 
     def __createPaths(self, category):
         """
@@ -52,38 +61,14 @@ class dataloader(object):
         self.__trainPersonsImages = os.path.join(self.__trainPersons, "images")
         self.__trainPersonsAnn = os.path.join(self.__trainPersons, "annotations")
 
-        try:
-            os.mkdir(self.__datasetfolder)
-        except:
-            pass
-        try:
-            os.mkdir(self.__train)
-        except:
-            pass
-        try:
-            os.mkdir(self.__val)
-        except:
-            pass
-        try:
-            os.mkdir(self.__test)
-        except:
-            pass
-        try:
-            os.mkdir(self.__annotations)
-        except:
-            pass
-        try:
-            os.mkdir(self.__trainPersons)
-        except:
-            pass
-        try:
-            os.mkdir(self.__trainPersonsImages)
-        except:
-            pass
-        try:
-            os.mkdir(self.__trainPersonsAnn)
-        except:
-            pass
+        self.__createFolder(self.__datasetfolder)
+        self.__createFolder(self.__train)
+        self.__createFolder(self.__val)
+        self.__createFolder(self.__test)
+        self.__createFolder(self.__annotations)
+        self.__createFolder(self.__trainPersons)
+        self.__createFolder(self.__trainPersonsImages)
+        self.__createFolder(self.__trainPersonsAnn)
 
     def  __downloadBarProgress(self, url, output):
         """

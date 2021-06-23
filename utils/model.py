@@ -3,7 +3,7 @@ from torch import nn
 import math
 import copy
 
-class swinBlocks(object):
+class SwinBlocks(object):
     """
         Class to create and handle swin block
     """
