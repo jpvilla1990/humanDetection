@@ -168,6 +168,7 @@ class DataPreprocessing(object):
         """
             Method to create batches as pickle files
         """
+        print("SEPARATING IMAGES IN BATCHES AND STORING THEM IN PICKLE FILES")
         imageFiles = os.listdir(self.__trainPersonsImages)
         annotationFiles = os.listdir(self.__trainPersonsAnn)
 
