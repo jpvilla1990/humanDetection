@@ -1,6 +1,6 @@
 import os
 import shutil
-import urllib
+from urllib import request
 import zipfile
 import json
 from collections import defaultdict
@@ -17,7 +17,7 @@ class DownloadProgressBar(tqdm):
         self.update(b * bsize - self.n)
 
 class Dataloader(object):
-    
+
     def __init__(self, category='person'):
         self.__cocoTrainUrl = "http://images.cocodataset.org/zips/train2017.zip"
         self.__cocoValUrl = "http://images.cocodataset.org/zips/val2017.zip"
@@ -26,7 +26,7 @@ class Dataloader(object):
         self.__cocoAnnotations = "http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
 
         self.__createPaths(category)
-
+        self.downloadCocoDataset()
         self.organizedDatasetByCategory(category)
 
     def __createFolder(self, folder):
@@ -56,7 +56,7 @@ class Dataloader(object):
 
         self.__imagesTrainFolder = os.path.join(self.__train, "train2017")
         self.__imagesValFolder = os.path.join(self.__val, "val2017")
-        
+
         self.__trainPersons = os.path.join(self.__train, category + "s")
         self.__trainPersonsImages = os.path.join(self.__trainPersons, "images")
         self.__trainPersonsAnn = os.path.join(self.__trainPersons, "annotations")
@@ -76,7 +76,7 @@ class Dataloader(object):
         """
         with DownloadProgressBar(unit='B', unit_scale=True,
                              miniters=1, desc=url.split('/')[-1]) as t:
-            urllib.request.urlretrieve(url, filename=output, reporthook=t.update_to)
+            request.urlretrieve(url, filename=output, reporthook=t.update_to)
 
     def __unzipFile(self, inputFile, outputFile):
         """
@@ -99,21 +99,21 @@ class Dataloader(object):
         testZip = os.path.join(self.__test, "test.zip")
         annotationsZip = os.path.join(self.__annotations, "annotations.zip")
 
-        if not os.listdir(self.__train):
+        if "train2017" not in os.listdir(self.__train):
             print("Downloading COCO train dataset")
             self.__downloadBarProgress(self.__cocoTrainUrl, trainZip)
             self.__unzipFile(trainZip, self.__train)
         else:
             print("COCO train dataset already downloaded")
 
-        if not os.listdir(self.__val):
+        if "val2017" not in os.listdir(self.__val):
             print("Downloading COCO val dataset")
             self.__downloadBarProgress(self.__cocoValUrl, valZip)
             self.__unzipFile(valZip, self.__val)
         else:
             print("COCO val dataset already downloaded")
 
-        if not os.listdir(self.__test):
+        if "test2017" not in os.listdir(self.__test):
             print("Downloading COCO test dataset")
             self.__downloadBarProgress(self.__cocoTestnUrl, testZip)
             self.__unzipFile(testZip, self.__test)
