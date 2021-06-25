@@ -49,8 +49,8 @@ class Dataloader(object):
         self.__val = os.path.join(self.__datasetfolder, "val")
         self.__test = os.path.join(self.__datasetfolder, "test")
 
-        self.__annotations = os.path.join(self.__datasetfolder, "annotations")
-        self.__annotations = os.path.join(self.__annotations, "annotations")
+        self.__annotationsParent = os.path.join(self.__datasetfolder, "annotations")
+        self.__annotations = os.path.join(self.__annotationsParent, "annotations")
         self.__annotationsFileTrainJSON = os.path.join(self.__annotations, "instances_train2017.json")
         self.__annotationsFileValJSON = os.path.join(self.__annotations, "instances_val2017.json")
 
@@ -65,7 +65,7 @@ class Dataloader(object):
         self.__createFolder(self.__train)
         self.__createFolder(self.__val)
         self.__createFolder(self.__test)
-        self.__createFolder(self.__annotations)
+        self.__createFolder(self.__annotationsParent)
         self.__createFolder(self.__trainPersons)
         self.__createFolder(self.__trainPersonsImages)
         self.__createFolder(self.__trainPersonsAnn)
@@ -97,7 +97,7 @@ class Dataloader(object):
         trainZip = os.path.join(self.__train, "train.zip")
         valZip = os.path.join(self.__val, "val.zip")
         testZip = os.path.join(self.__test, "test.zip")
-        annotationsZip = os.path.join(self.__annotations, "annotations.zip")
+        annotationsZip = os.path.join(self.__annotationsParent, "annotations.zip")
 
         if "train2017" not in os.listdir(self.__train):
             print("Downloading COCO train dataset")
@@ -120,10 +120,10 @@ class Dataloader(object):
         else:
             print("COCO test dataset already downloaded")
 
-        if not os.listdir(self.__annotations):
+        if not os.listdir(self.__annotationsParent):
             print("Downloading COCO annotations dataset")
             self.__downloadBarProgress(self.__cocoAnnotations, annotationsZip)
-            self.__unzipFile(annotationsZip, self.__annotations)
+            self.__unzipFile(annotationsZip, self.__annotationsParent)
         else:
             print("COCO annotations dataset already downloaded")
 
@@ -227,10 +227,20 @@ class Dataloader(object):
 
         return newImage
 
+    def __printProgress(self, index, total):
+        """
+            Show the progress in percentage
+        """
+        print("\rPROGRESS: {}%".format(round((index * 100) / total, 2)), end="", flush=True)
+
+        if index == total - 1:
+            print("\n")
+
     def organizedDatasetByCategory(self, category='person'):
         """
             Method to organize in folders the images and segmentations by category
         """
+        print("EXTRACTING IMAGES BY CATEGORY: {}".format(category))
         if category=='person':
             targetFolderImages = self.__trainPersonsImages
             targetFolderAnnotations = self.__trainPersonsAnn
@@ -248,7 +258,10 @@ class Dataloader(object):
 
         annotations, images = self.__obtainMasks(category, train=True)
 
+        index = 0
+        totalImages = len(images)
         for image_id in images:
+            self.__printProgress(index, totalImages)
             imageOrigin = os.path.join(self.__imagesTrainFolder, images[image_id]['file_name'])
             imageTarget = os.path.join(targetFolderImages, images[image_id]['file_name'])
 
@@ -260,12 +273,8 @@ class Dataloader(object):
             mask.save(annTarget)
             mask.close()
 
+            index += 1
 
 
-            
-
-
-
-        
 
 
