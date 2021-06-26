@@ -64,12 +64,15 @@ class Train(object):
         """
         currentTime = datetime.now()
         if self.__lastTime is None:
-            return None
+            inferenceTime = None
         else:
             inferenceTime = currentTime - self.__lastTime
         self.__lastTime = currentTime
 
-        return inferenceTime.total_seconds()
+        if inferenceTime:
+            return inferenceTime.total_seconds()
+        else:
+            return inferenceTime
 
     def __loadPickle(self, file):
         """
