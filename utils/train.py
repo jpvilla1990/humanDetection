@@ -141,7 +141,6 @@ class Train(object):
             self.__writeLog(logFile, optimizer)
 
             optimizer.zero_grad()   # zero the gradient buffers
-            ann_hat = model.forward(img.float())
 
             ann_hat = model.forward(img, parameters)
             ann_hat = torch.flatten(ann_hat, start_dim=1)
