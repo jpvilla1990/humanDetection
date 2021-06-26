@@ -142,7 +142,7 @@ class Train(object):
 
             optimizer.zero_grad()   # zero the gradient buffers
 
-            img = img.permute(0,3,1,2)
+            img = img.permute(0,2,3,1)
 
             ann_hat = model.forward(img, parameters)
             ann_hat = torch.flatten(ann_hat, start_dim=1)
