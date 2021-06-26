@@ -13,6 +13,7 @@ import random
 from utils.model import SwinBlocks
 from utils.dataloader import Dataloader
 from utils.trainingSetLoader import TrainingSetLoader
+from utils.dataPreprocessing import DataPreprocessing
 
 class Train(object):
     """
@@ -86,7 +87,7 @@ class Train(object):
 
     def supervisedLearningTrain(
                                 self,
-                                trainingSetFolder,
+                                category="person",
                                 logFile,
                                 modelFile,
                                 batch_size=5,
@@ -100,7 +101,11 @@ class Train(object):
             Method to train neural network
             using all the datasets
         """
-        trainingSetLoader = TrainingSetLoader(trainingSetFolder)
+        #trainingSetLoader = TrainingSetLoader(trainingSetFolder)
+        dataPreprocessing = DataPreprocessing(
+                                              category=category,
+                                              batchSize=batch_size
+                                             )
 
         parameters = model.getWeights()
         optimizer = optim.Adam(parameters, lr=lr)
@@ -113,13 +118,25 @@ class Train(object):
         # curr_loss = None
         # loss_history = []
 
+        subIndexBatch = 0
+        numberSubBatches = 0
+
         for epoch in range(epochs):
 
-            batchFile = trainingSetFolder.getCurrentBatch()
-            batchSample = self.__loadPickle(batchFile)
+            #batchFile = trainingSetFolder.getCurrentBatch()
+            #batchSample = self.__loadPickle(batchFile)
 
-            img = batchSample[0]
-            ann = batchSample[1]
+            if numberSubBatches == subIndexBatch:
+                batch = dataPreprocessing.generateBatch()
+                subIndexBatch = 0
+                imgBatches = batch[0]
+                annBatches = batch[1]
+                numberSubBatches = len(imgBatches)
+
+            img = imgBatches[subIndexBatch]
+            ann = annBatches[subIndexBatch]
+
+            subIndexBatch += 1
 
             self.__writeLog(logFile, optimizer)
 
@@ -158,7 +175,7 @@ class Train(object):
                 #            np.array(loss_history),
                 #            delimiter=',',
                 #            fmt="%s")
-            
+
             self.__writeLog(logFile, "Epoch: {}".format(str(epoch)))
             self.__writeLog(logFile, "Batch: {}".format(str(trainingSetFolder.getCurrentNumberBatch)))
             self.__writeLog(logFile, "Loss: {}".format(str(loss)))
