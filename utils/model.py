@@ -7,15 +7,15 @@ class SwinBlocks(object):
     """
         Class to create and handle swin block
     """
-    def __init__(self, imageSize, C=96, patchesSize=4, windowSize=4):
+    def __init__(self, C=96, patchesSize=4, windowSize=4):
         self.__patchSize = 4*4*3
         self.__C = C
         self.__patchesSize = patchesSize
-        self.generateWeights(imageSize)
+        self.generateWeights()
         self.__layerNorm = nn.functional.layer_norm
         self.__windowSize = windowSize
 
-    def generateWeights(self, imageSize):
+    def generateWeights(self):
         """
             Method to generate randomly the weights
         """
@@ -380,5 +380,66 @@ class SwinBlocks(object):
         #                               bias=weights[3])
         # Separating elements by Lr and Re
         #x = x.reshape(2,int(len(x)/2))
+
+        return x
+
+class ImageSegmentationModel(object):
+    """
+        Class to combine another neural network output with a layer for binary segmentation
+    """
+    def __init__(self, backBone="swinBlock", desireOutput = [256, 256]):
+        self.__desireOutput = desireOutput
+        if backBone == "swinBlock":
+            self.__backBone = SwinBlocks()
+        else:
+            print("Specified Backbone is not valid")
+            exit()
+
+        self.generateWeights()
+
+    def generateWeights(self):
+        """
+            Method to generate randomly the weights
+        """
+        self.__backBone.generateWeights()
+        weights = self.__backBone.getWeights()
+
+        self.__backBoneWeightsLen = len(weights)
+
+        mockBackBoneInput = torch.ones([1, self.__desireOutput[0], self.__desireOutput[1], 3])
+        mockBackBoneOutput = self.__backBone.forward(mockBackBoneInput, weights)
+
+        backBoneOutputDim = torch.flatten(mockBackBoneOutput, start_dim=1).shape[1]
+
+        outputDim = self.__desireOutput[0] * self.__desireOutput[1]
+        # Linear Embedding
+        weights.append(torch.Tensor(outputDim, backBoneOutputDim).uniform_(0, 1/math.sqrt(backBoneOutputDim)).requires_grad_())
+        weights.append(torch.Tensor(outputDim).zero_().requires_grad_())
+
+        self.__weights = weights
+
+    def getWeights(self):
+        """
+            Method to get current Weights
+        """
+        return copy.deepcopy(self.__weights)
+
+    def forward(self, x, weights, training=True):
+        """
+            Method to execute forward of the base learner model using torch.functional
+            this due that nn.Module does not keep track of the gradients and therefore
+            functional is needed to be able to calculate the gradient of the loss respect
+            the meta learner parameters, going through the base learner forward execution
+        """
+        if weights == None:
+            weights = self.__weights
+
+        x = self.__backBone.forward(weights[0:self.__backBoneWeightsLen])
+        x = torch.nn.functional.linear(
+                                       x,
+                                       weight=weights[self.__backBoneWeightsLen],
+                                       bias=weights[self.__backBoneWeightsLen + 1]
+                                      )
+        x = torch.nn.functional.sigmoid(x)
 
         return x
