@@ -382,4 +382,3 @@ class SwinBlocks(object):
         #x = x.reshape(2,int(len(x)/2))
 
         return x
-

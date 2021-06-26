@@ -88,8 +88,8 @@ class Train(object):
     def supervisedLearningTrain(
                                 self,
                                 category="person",
-                                logFile,
-                                modelFile,
+                                logFile="log.txt",
+                                modelFile="supervisedLearning.pickle",
                                 batch_size=5,
                                 epochs=10000,
                                 model=None,
@@ -144,6 +144,16 @@ class Train(object):
             ann_hat = model.forward(img.float())
 
             ann_hat = model.forward(img, parameters)
+            ann_hat = torch.flatten(ann_hat, start_dim=1)
+            dimX = ann.shape[2]
+            dimY = ann.hat[1] / dimX
+
+            print(ann.shape)
+
+            ann_hat = ann_hat.reshape([ann.shape[0], ann.shape[1], dimX, dimY])
+            ann_hat = torch.nn.functional.interpolate(ann_hat, (ann.shape[2], ann.shape[3]))
+
+            print(ann_hat.shape)
 
             self.__writeLog(logFile, ann_hat.sum())
             self.__writeLog(logFile, ann.sum())
