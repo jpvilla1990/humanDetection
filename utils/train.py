@@ -147,7 +147,7 @@ class Train(object):
             ann_hat = model.forward(img, parameters)
             ann_hat = torch.flatten(ann_hat, start_dim=1)
             dimX = ann.shape[2]
-            dimY = ann_hat.shape[1] / dimX
+            dimY = int(ann_hat.shape[1] / dimX)
 
             print(ann.shape)
 
