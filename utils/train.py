@@ -64,10 +64,10 @@ class Train(object):
         """
         currentTime = datetime.now()
         if self.__lastTime is None:
-            inferenceTime = None
+            return None
         else:
             inferenceTime = currentTime - self.__lastTime
-        self.__lastTime = inferenceTime
+        self.__lastTime = currentTime
 
         return inferenceTime.total_seconds()
 
@@ -149,12 +149,8 @@ class Train(object):
             dimX = ann.shape[2]
             dimY = int(ann_hat.shape[1] / dimX)
 
-            print(ann.shape)
-
             ann_hat = ann_hat.reshape([ann.shape[0], ann.shape[1], dimX, dimY])
             ann_hat = torch.nn.functional.interpolate(ann_hat, (ann.shape[2], ann.shape[3]))
-
-            print(ann_hat.shape)
 
             self.__writeLog(logFile, ann_hat.sum())
             self.__writeLog(logFile, ann.sum())
