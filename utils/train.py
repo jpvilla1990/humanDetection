@@ -121,6 +121,8 @@ class Train(object):
         subIndexBatch = 0
         numberSubBatches = 0
 
+        self.__writeLog(logFile, optimizer)
+
         for epoch in range(epochs):
 
             #batchFile = trainingSetFolder.getCurrentBatch()
@@ -137,8 +139,6 @@ class Train(object):
             ann = annBatches[subIndexBatch]
 
             subIndexBatch += 1
-
-            self.__writeLog(logFile, optimizer)
 
             optimizer.zero_grad()   # zero the gradient buffers
 
