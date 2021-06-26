@@ -184,7 +184,6 @@ class Train(object):
                 #            fmt="%s")
 
             self.__writeLog(logFile, "Epoch: {}".format(str(epoch)))
-            self.__writeLog(logFile, "Batch: {}".format(str(trainingSetFolder.getCurrentNumberBatch)))
             self.__writeLog(logFile, "Loss: {}".format(str(loss)))
             percentDone = round((epoch / epochs) * 100, 2)
             self.__writeLog(logFile, "Progress: {}".format(str(percentDone)))
