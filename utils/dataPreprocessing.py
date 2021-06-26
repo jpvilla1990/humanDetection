@@ -15,6 +15,8 @@ class DataPreprocessing(object):
         self.__toPIL = transforms.ToPILImage()
         self.__toTensor = transforms.ToTensor()
 
+        self.__batchIndex = 0
+
     def __createPaths(self, category):
         """
             Method to create paths
@@ -192,6 +194,31 @@ class DataPreprocessing(object):
                 batchIndex += 1
 
             self.__printProgress(index, len(imageFiles))
+            
+    def generateBatch(self):
+        """
+            Method to generate batch, every time it is invoked the index is increased by one
+        """
+        imageFiles = os.listdir(self.__trainPersonsImages)
+        annotationFiles = os.listdir(self.__trainPersonsAnn)
+
+        imageFile = os.path.join(self.__trainPersonsImages, imageFiles[self.__batchIndex])
+        annotationFile = os.path.join(self.__trainPersonsAnn, annotationFiles[self.__batchIndex])
+
+        imageTorch = self.__loadImage(imageFile)
+        annotationTorch = self.__loadImage(annotationFile)
+
+        imagesCropped, annotationsCropped = self.__cropImage(imageTorch, annotationTorch)
+
+        batchesImages = self.__splitInBatches(imagesCropped)
+        batchesAnnotations = self.__splitInBatches(annotationsCropped)
+
+        self.__batchIndex += 1
+        
+        if self.__batchIndex == len(imageFiles):
+            self.__batchIndex = 0
+        
+        return batchesImages, batchesAnnotations
 
 
 
