@@ -109,7 +109,7 @@ class Train(object):
 
         parameters = model.getWeights()
         optimizer = optim.Adam(parameters, lr=lr)
-        criterion = torch.nn.CrossEntropyLoss()
+        criterion = torch.nn.BCEWithLogitsLoss()
 
         # loss_epoch = []
         # prev_loss_avg = None
