@@ -202,6 +202,11 @@ class DataPreprocessing(object):
         imageFiles = os.listdir(self.__trainPersonsImages)
         annotationFiles = os.listdir(self.__trainPersonsAnn)
 
+        if self.__batchIndex == 0:
+            joinFiles = list(zip(imageFiles, annotationFiles))
+            random.shuffle(joinFiles)
+            imageFiles, annotationFiles = zip(*joinFiles)
+
         imageFile = os.path.join(self.__trainPersonsImages, imageFiles[self.__batchIndex])
         annotationFile = os.path.join(self.__trainPersonsAnn, annotationFiles[self.__batchIndex])
 
