@@ -4,7 +4,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 import sklearn.model_selection as selection
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from torchvision import transforms
 from datetime import datetime
 import pickle
@@ -179,7 +179,7 @@ class Train(object):
             ann_hat = ann_hat.reshape([ann.shape[0], ann.shape[1], dimX, dimY])
             ann_hat = torch.nn.functional.interpolate(ann_hat, (ann.shape[2], ann.shape[3]))
 
-            self.__writeLog(logFile, torch.nn.functional.sigmoid(ann_hat).sum())
+            self.__writeLog(logFile, torch.sigmoid(ann_hat).sum())
             self.__writeLog(logFile, ann.sum())
             self.__writeLog(logFile, "Inference Time: {}".format(str(self.__inferenceTime())))
             self.__writeLog(logFile, "Learning Rate: {}".format(str(lr)))
