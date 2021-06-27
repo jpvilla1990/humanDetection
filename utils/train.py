@@ -179,7 +179,7 @@ class Train(object):
             ann_hat = ann_hat.reshape([ann.shape[0], ann.shape[1], dimX, dimY])
             ann_hat = torch.nn.functional.interpolate(ann_hat, (ann.shape[2], ann.shape[3]))
 
-            self.__writeLog(logFile, ann_hat.sum())
+            self.__writeLog(logFile, torch.nn.functional.sigmoid(ann_hat).sum())
             self.__writeLog(logFile, ann.sum())
             self.__writeLog(logFile, "Inference Time: {}".format(str(self.__inferenceTime())))
             self.__writeLog(logFile, "Learning Rate: {}".format(str(lr)))
@@ -210,7 +210,7 @@ class Train(object):
             self.__savePickle(os.path.join(self.__pickleModelsPath, modelFile),
                               saveParams)
 
-            if batch % 10 == 0:
+            if epoch % 10 == 0:
                 self.__savePickle(os.path.join(self.__pickleModelsPath, backUpModelFile),
                                   saveParams)
                 # plt.plot(step, 10 * np.log10(loss_history))
