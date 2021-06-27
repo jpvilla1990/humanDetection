@@ -107,6 +107,7 @@ class Train(object):
             Method to train neural network
             using all the datasets
         """
+        backUpModelFile = "{}_backUp.pickle".format(modelFile.split(".")[0])
         #trainingSetLoader = TrainingSetLoader(trainingSetFolder)
         dataPreprocessing = DataPreprocessing(
                                               category=category,
@@ -114,7 +115,13 @@ class Train(object):
                                              )
 
         if os.path.isfile(os.path.join(self.__pickleModelsPath, modelFile)):
-            parameters = self.__loadPickle(os.path.join(self.__pickleModelsPath, modelFile))
+            try:
+                parameters = self.__loadPickle(os.path.join(self.__pickleModelsPath, modelFile))
+            except:
+                try:
+                    parameters = self.__loadPickle(os.path.join(self.__pickleModelsPath, backUpModelFile))
+                except:
+                    parameters = model.getWeights()
         else:
             parameters = model.getWeights()
 
@@ -202,6 +209,10 @@ class Train(object):
 
             self.__savePickle(os.path.join(self.__pickleModelsPath, modelFile),
                               saveParams)
+
+            if batch % 10 == 0:
+                self.__savePickle(os.path.join(self.__pickleModelsPath, backUpModelFile),
+                                  saveParams)
                 # plt.plot(step, 10 * np.log10(loss_history))
                 # plt.xlabel("batch")
                 # plt.ylabel("db")
