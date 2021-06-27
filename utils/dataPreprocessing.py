@@ -218,6 +218,7 @@ class DataPreprocessing(object):
             newImageTorch[2] = imageTorch
             imageTorch = newImageTorch
         annotationTorch = self.__loadImage(annotationFile)
+        annotationTorch = torch.round(annotationTorch)
 
         imagesCropped, annotationsCropped = self.__cropImage(imageTorch, annotationTorch)
 
