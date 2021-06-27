@@ -179,7 +179,7 @@ class Train(object):
             ann_hat = ann_hat.reshape([ann.shape[0], ann.shape[1], dimX, dimY])
             ann_hat = torch.nn.functional.interpolate(ann_hat, (ann.shape[2], ann.shape[3]))
 
-            self.__writeLog(logFile, torch.sigmoid(ann_hat).sum())
+            self.__writeLog(logFile, torch.round(torch.sigmoid(ann_hat).sum()))
             self.__writeLog(logFile, ann.sum())
             self.__writeLog(logFile, "Inference Time: {}".format(str(self.__inferenceTime())))
             self.__writeLog(logFile, "Learning Rate: {}".format(str(lr)))
