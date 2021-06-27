@@ -206,6 +206,12 @@ class DataPreprocessing(object):
         annotationFile = os.path.join(self.__trainPersonsAnn, annotationFiles[self.__batchIndex])
 
         imageTorch = self.__loadImage(imageFile)
+        if imageTorch.shape[0] != 3:
+            newImageTorch = torch.ones([3, imageTorch.shape[1], imageTorch.shape[2]])
+            newImageTorch[0] = imageTorch
+            newImageTorch[1] = imageTorch
+            newImageTorch[2] = imageTorch
+            imageTorch = newImageTorch
         annotationTorch = self.__loadImage(annotationFile)
 
         imagesCropped, annotationsCropped = self.__cropImage(imageTorch, annotationTorch)

@@ -1,5 +1,7 @@
 from utils.dataloader import Dataloader
 from utils.dataPreprocessing import DataPreprocessing
+from utils.model import SwinBlocks
+from utils.train import Train
 
 class Main(object):
     def __init__(self, category="person"):
@@ -17,3 +19,6 @@ class Main(object):
             Method to run all processes
         """
         self.__runDataloader()
+        model = SwinBlocks()
+        train = Train()
+        train.supervisedLearningTrain(model=model)

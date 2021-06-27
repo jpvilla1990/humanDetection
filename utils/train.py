@@ -24,6 +24,9 @@ class Train(object):
         self.__createPaths()
         self.__lastTime = None
 
+        if torch.cuda.is_available():
+            self.__cuda = True
+
     def __createFolder(self, folder):
         """
             Method to create a folder
@@ -111,6 +114,13 @@ class Train(object):
                                              )
 
         parameters = model.getWeights()
+
+        if self.__cuda:
+            newParams = parameters
+            parameters = []
+            for par in newParams:
+                parameters.append(par.cuda().detach().requires_grad_())
+
         optimizer = optim.Adam(parameters, lr=lr)
         criterion = torch.nn.BCEWithLogitsLoss()
 
@@ -140,6 +150,10 @@ class Train(object):
 
             img = imgBatches[subIndexBatch]
             ann = annBatches[subIndexBatch]
+
+            if self.__cuda:
+                img = img.cuda()
+                ann = ann.cuda()
 
             subIndexBatch += 1
 
@@ -175,8 +189,16 @@ class Train(object):
                 #     loss_history[len(loss_history) - 1] = prev_loss
                 # prev_loss = curr_loss
 
+            if self.__cuda:
+                newParams = parameters
+                saveParams = []
+                for par in newParams:
+                    saveParams.append(par.cpu().detach().requires_grad_())
+            else:
+                saveParams = parameters
+
             self.__savePickle(os.path.join(self.__pickleModelsPath, modelFile),
-                              parameters)
+                              saveParams)
                 # plt.plot(step, 10 * np.log10(loss_history))
                 # plt.xlabel("batch")
                 # plt.ylabel("db")
