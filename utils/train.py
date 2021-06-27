@@ -97,7 +97,7 @@ class Train(object):
                                 logFile="log.txt",
                                 modelFile="supervisedLearning.pickle",
                                 batch_size=5,
-                                epochs=10000,
+                                epochs=1000000,
                                 model=None,
                                 lr=0.001,
                                 momentum=0.9,
@@ -113,7 +113,10 @@ class Train(object):
                                               batchSize=batch_size
                                              )
 
-        parameters = model.getWeights()
+        if os.path.isfile(os.path.join(self.__pickleModelsPath, modelFile)):
+            parameters = self.__loadPickle(os.path.join(self.__pickleModelsPath, modelFile))
+        else:
+            parameters = model.getWeights()
 
         if self.__cuda:
             newParams = parameters
