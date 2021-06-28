@@ -14,11 +14,11 @@ class Main(object):
         dataloader = Dataloader(self.__category)
         dataloader.downloadCocoDataset()
 
-    def run(self):
+    def runTrain(self, lr=0.001):
         """
             Method to run all processes
         """
         self.__runDataloader()
         model = SwinBlocks()
         train = Train()
-        train.supervisedLearningTrain(model=model)
+        train.supervisedLearningTrain(model=model, lr=lr)

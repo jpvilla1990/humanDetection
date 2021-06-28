@@ -199,16 +199,16 @@ class DataPreprocessing(object):
         """
             Method to generate batch, every time it is invoked the index is increased by one
         """
-        imageFiles = os.listdir(self.__trainPersonsImages)
-        annotationFiles = os.listdir(self.__trainPersonsAnn)
 
         if self.__batchIndex == 0:
-            joinFiles = list(zip(imageFiles, annotationFiles))
+            self.__imageFiles = os.listdir(self.__trainPersonsImages)
+            self.__annotationFiles = os.listdir(self.__trainPersonsAnn)
+            joinFiles = list(zip(self.__imageFiles, self.__annotationFiles))
             random.shuffle(joinFiles)
-            imageFiles, annotationFiles = zip(*joinFiles)
+            self.__imageFiles, self.__annotationFiles = zip(*joinFiles)
 
-        imageFile = os.path.join(self.__trainPersonsImages, imageFiles[self.__batchIndex])
-        annotationFile = os.path.join(self.__trainPersonsAnn, annotationFiles[self.__batchIndex])
+        imageFile = os.path.join(self.__trainPersonsImages, self.__imageFiles[self.__batchIndex])
+        annotationFile = os.path.join(self.__trainPersonsAnn, self.__annotationFiles[self.__batchIndex])
 
         imageTorch = self.__loadImage(imageFile)
         if imageTorch.shape[0] != 3:
@@ -227,7 +227,7 @@ class DataPreprocessing(object):
 
         self.__batchIndex += 1
         
-        if self.__batchIndex == len(imageFiles):
+        if self.__batchIndex == len(self.__imageFiles):
             self.__batchIndex = 0
         
         return batchesImages, batchesAnnotations
