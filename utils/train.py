@@ -2,7 +2,6 @@ import os
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
-import sklearn.model_selection as selection
 import numpy as np
 #import matplotlib.pyplot as plt
 from torchvision import transforms
