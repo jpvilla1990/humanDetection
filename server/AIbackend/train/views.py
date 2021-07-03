@@ -17,7 +17,7 @@ main = Main(category="person")
 def a():
     main.runTrain(lr=0.001)
 
-threadTrain = ThreadWithTrace(a)
+threadTrain = ThreadWithTrace(target=a)
 
 def index(request):
     return HttpResponse("{}".format(sys.path))
