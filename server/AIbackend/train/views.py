@@ -45,10 +45,13 @@ def stopTrain(request):
     return HttpResponse("{}".format(str(response)))
 
 def getTrainStatus(request):
-    response = main.getTrainStatus(lines=50)
+    response = []
+    if threads[0].is_alive():
+        state = "Training Running"
+    else:
+        state = "Training Stopped"
+    response.append(state)
+    response.append(main.getTrainStatus(lines=50))
     return HttpResponse("{}".format(str(response)))
 
-def stopServer(request):
-    exit()
-    return
 
