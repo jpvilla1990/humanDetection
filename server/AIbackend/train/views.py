@@ -24,7 +24,7 @@ def initThread():
 threads = [ThreadWithTrace(target=runTrainThread)]
 
 def index(request):
-    return HttpResponse("{}".format(sys.path))
+    return HttpResponse("{}".format("Miki I love you so Much!!"))
 
 def runTrain(request):
     if threads[0].is_alive():
