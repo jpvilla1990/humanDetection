@@ -13,7 +13,11 @@ from main import Main
 from utils.threading import ThreadWithTrace
 
 main = Main(category="person")
-threadTrain = ThreadWithTrace(main.runTrain(lr=0.001))
+
+def a():
+    main.runTrain(lr=0.001)
+
+threadTrain = ThreadWithTrace(a)
 
 def index(request):
     return HttpResponse("{}".format(sys.path))
