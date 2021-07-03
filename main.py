@@ -37,8 +37,8 @@ class Main(object):
         lenNewVector = int(len(vector) / scale)
         newVector = []
         for i in range(lenNewVector):
-            init = i * scale
-            final = (i + 1) * scale
+            init = int(i * scale)
+            final = int((i + 1) * scale)
             bufferVector = vector[init: final]
             avg = sum(bufferVector)/len(bufferVector)
             newVector.append(avg)
