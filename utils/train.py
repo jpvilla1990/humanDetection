@@ -243,9 +243,7 @@ class Train(object):
         """
         linesArray = []
         logFile = os.path.join(self.__logsPath, logFile)
-
-        def read_lastnlines(fname,n):
-	    with open(logFile) as f:
+        with open(logFile) as f:
 		    for line in (f.readlines() [-lines:]):
 			    linesArray.append(line)
 
