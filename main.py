@@ -43,14 +43,14 @@ class Main(object):
             avg = sum(bufferVector)/len(bufferVector)
             newVector.append(avg)
 
+        return newVector
+
     def getLoss(self):
         """
             Method to obtain an array of len=100 with the loss into log scale
         """
         train = Train()
         loss = train.returnLoss()
-        print(loss)
         scale = len(loss) / 100
         lossScaled = self.__rescaleVector(loss, scale)
-        print(lossScaled)
         return lossScaled
