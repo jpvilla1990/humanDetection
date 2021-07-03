@@ -24,7 +24,7 @@ def initThread():
 threads = [ThreadWithTrace(target=runTrainThread)]
 
 def index(request):
-    return HttpResponse("{}".format("Miki I love you so Much!!"))
+    return HttpResponse("{}".format("Train Index"))
 
 def runTrain(request):
     if threads[0].is_alive():
@@ -43,3 +43,12 @@ def stopTrain(request):
     else:
         response = "Thread is not running"
     return HttpResponse("{}".format(str(response)))
+
+def getTrainStatus(request):
+    response = main.getTrainStatus(lines=50)
+    return HttpResponse("{}".format(str(response)))
+
+def stopServer(request):
+    exit()
+    return
+

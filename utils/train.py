@@ -236,3 +236,13 @@ class Train(object):
             #             param_group['lr'] = lr_current
             # prev_loss_avg = curr_loss_avg
             # loss_epoch = []
+
+    def __returnLog(self, logFile="log.txt", lines=50):
+        """
+            Method to return last Lines of the log
+        """
+        logFile = os.path.join(self.__logsPath, logFile)
+        with open(logFile) as f:
+		for line in (f.readlines() [-lines:]):
+			print(line)
+

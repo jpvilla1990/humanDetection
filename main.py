@@ -22,3 +22,10 @@ class Main(object):
         model = SwinBlocks()
         train = Train()
         train.supervisedLearningTrain(model=model, lr=lr)
+
+    def getTrainStatus(self, lines):
+        """
+            Method to obtain train status
+        """
+        train = Train()
+        return train.returnLog(lines=lines)
