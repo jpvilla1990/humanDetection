@@ -27,20 +27,18 @@ def index(request):
     return HttpResponse("{}".format(sys.path))
 
 def runTrain(request):
-    threadTrain = threads[0]
-    if threadTrain.is_alive():
+    if threads[0].is_alive():
         response = "Training is running"
     else:
         initThread()
-        threadTrain.start()
+        threads[0].start()
         response = "Training is started"
     return HttpResponse("{}".format(str(response)))
 
 def stopTrain(request):
-    threadTrain = threads[0]
-    if threadTrain.is_alive():
-        threadTrain.kill()
-        threadTrain.join()
+    if threads[0].is_alive():
+        threads[0].kill()
+        threads[0].join()
         response = "Thread stopped"
     else:
         response = "Thread is not running"
