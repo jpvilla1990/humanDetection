@@ -15,7 +15,7 @@ from utils.threading import ThreadWithTrace
 main = Main(category="person")
 
 def runTrainThread():
-    main.runTrain(lr=0.001)
+    main.runTrain(lr=0.00001)
 
 def initThread():
     del threads[0]
