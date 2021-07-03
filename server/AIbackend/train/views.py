@@ -14,10 +14,12 @@ from utils.threading import ThreadWithTrace
 
 main = Main(category="person")
 
-def a():
+def runTrainThread():
     main.runTrain(lr=0.001)
 
-threadTrain = ThreadWithTrace(target=a)
+def initThread():
+    threadTrain = ThreadWithTrace(target=runTrainThread)
+threadTrain = ThreadWithTrace(target=runTrainThread)
 
 def index(request):
     return HttpResponse("{}".format(sys.path))
@@ -26,6 +28,7 @@ def runTrain(request):
     if threadTrain.is_alive():
         response = "Training is running"
     else:
+        initThread()
         threadTrain.start()
         response = "Training is started"
     return HttpResponse("{}".format(str(response)))
