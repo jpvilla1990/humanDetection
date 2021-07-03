@@ -61,7 +61,6 @@ def getTrainStatus(request):
 
 def getLoss(request):
     loss = main.getLoss()
-    print(loss)
     matplotlib.use('Agg')
     plt.plot(loss)
     plt.savefig('loss.jpg')

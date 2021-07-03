@@ -49,6 +49,8 @@ class Main(object):
         """
         train = Train()
         loss = train.returnLoss()
+        print(loss)
         scale = len(loss) / 100
         lossScaled = self.__rescaleVector(loss, scale)
+        print(lossScaled)
         return lossScaled
