@@ -67,6 +67,5 @@ def getLoss(request):
 
     im = Image.open('loss.jpg')
 
-    response = HttpResponse(im, content_type='image/jpg')
-    response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+    response = HttpResponse(mimetype='image/jpg')
     return response
