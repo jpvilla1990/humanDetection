@@ -7,4 +7,5 @@ urlpatterns = [
     path('runTrain', views.runTrain, name='runTrain'),
     path('stopTrain', views.stopTrain, name='stopTrain'),
     path('getTrainStatus', views.getTrainStatus, name='getTrainStatus'),
+    path('getLoss', views.getLoss, name='getLoss'),
 ]
