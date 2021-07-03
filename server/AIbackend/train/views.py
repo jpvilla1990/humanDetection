@@ -18,13 +18,16 @@ def runTrainThread():
     main.runTrain(lr=0.001)
 
 def initThread():
-    threadTrain = ThreadWithTrace(target=runTrainThread)
-threadTrain = ThreadWithTrace(target=runTrainThread)
+    del threads[0]
+    threads.append(ThreadWithTrace(target=runTrainThread))
+
+threads = [ThreadWithTrace(target=runTrainThread)]
 
 def index(request):
     return HttpResponse("{}".format(sys.path))
 
 def runTrain(request):
+    threadTrain = threads[0]
     if threadTrain.is_alive():
         response = "Training is running"
     else:
@@ -34,6 +37,7 @@ def runTrain(request):
     return HttpResponse("{}".format(str(response)))
 
 def stopTrain(request):
+    threadTrain = threads[0]
     if threadTrain.is_alive():
         threadTrain.kill()
         threadTrain.join()
