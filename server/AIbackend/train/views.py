@@ -9,6 +9,11 @@ upDir = os.path.split(upDir[0])
 upDir = os.path.split(upDir[0])
 
 sys.path.append(upDir[0])
+
+from PIL import Image
+from matplotlib import pyplot as plt
+import matplotlib
+
 from main import Main
 from utils.threading import ThreadWithTrace
 
@@ -54,4 +59,14 @@ def getTrainStatus(request):
     response.append(main.getTrainStatus(lines=50))
     return HttpResponse("{}".format(str(response)))
 
+def getLoss(request):
+    loss = main.getLoss()
+    matplotlib.use('Agg')
+    plt.plot(loss)
+    plt.savefig('loss.jpg')
 
+    im = Image.open('loss.jpg')
+
+    response = HttpResponse(im, content_type='image/jpg')
+    response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+    return response

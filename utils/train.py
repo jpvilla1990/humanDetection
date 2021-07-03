@@ -3,6 +3,7 @@ import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import numpy as np
+import math
 #import matplotlib.pyplot as plt
 from torchvision import transforms
 from datetime import datetime
@@ -249,4 +250,18 @@ class Train(object):
 
         return linesArray
 
+    def returnLoss(self, logFile="log.txt"):
+        """
+            Method to return all Lines of the log filtered by loss
+        """
+        logFile = os.path.join(self.__logsPath, logFile)
+        with open(logFile) as f:
+            linesArray = f.readlines()
 
+        loss = []
+        for line in linesArray:
+            if "Loss" in line:
+                lossValue = float(line.split("(")[1].split(",")[0])
+                loss.append(10 * math.log10(lossValue))
+
+        return loss

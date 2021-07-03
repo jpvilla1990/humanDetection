@@ -29,3 +29,26 @@ class Main(object):
         """
         train = Train()
         return train.returnLog(lines=lines)
+
+    def __rescaleVector(self, vector, scale):
+        """
+            Rescale a vector to make it shorter
+        """
+        lenNewVector = int(len(vector) / scale)
+        newVector = []
+        for i in range(lenNewVector):
+            init = i * scale
+            final = (i + 1) * scale
+            bufferVector = vector[init: final]
+            avg = sum(bufferVector)/len(bufferVector)
+            newVector.append(avg)
+
+    def getLoss(self):
+        """
+            Method to obtain an array of len=100 with the loss into log scale
+        """
+        train = Train()
+        loss = train.returnLoss()
+        scale = len(loss) / 100
+        lossScaled = self.__rescaleVector(loss, scale)
+        return lossScaled
