@@ -13,13 +13,12 @@ from main import Main
 from utils.threading import ThreadWithTrace
 
 main = Main(category="person")
-threadTrain = None
+threadTrain = ThreadWithTrace(main.runTrain(lr=0.001))
 
 def index(request):
     return HttpResponse("{}".format(sys.path))
 
 def runTrain(request):
-    threadTrain = ThreadWithTrace(main.runTrain(lr=0.001))
     if threadTrain.is_alive():
         response = "Training is running"
     else:
