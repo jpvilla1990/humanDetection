@@ -244,8 +244,8 @@ class Train(object):
         linesArray = []
         logFile = os.path.join(self.__logsPath, logFile)
         with open(logFile) as f:
-		    for line in (f.readlines() [-lines:]):
-			    linesArray.append(line)
+            for line in (f.readlines() [-lines:]):
+                linesArray.append(line)
 
         return linesArray
 
