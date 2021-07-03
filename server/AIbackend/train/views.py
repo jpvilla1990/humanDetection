@@ -19,7 +19,7 @@ def index(request):
     return HttpResponse("{}".format(sys.path))
 
 def runTrain(request):
-    ThreadWithTrace(main.runTrain(lr=0.001))
+    threadTrain = ThreadWithTrace(main.runTrain(lr=0.001))
     if threadTrain.is_alive():
         response = "Training is running"
     else:
