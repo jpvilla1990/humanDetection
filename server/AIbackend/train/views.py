@@ -61,13 +61,14 @@ def getTrainStatus(request):
 
 def getLoss(request):
     imageName = 'loss.jpg'
-    if os.path.exists(imageName):
-        os.remove(imageName)
+    # if os.path.exists(imageName):
+    #     os.remove(imageName)
 
     loss = main.getLoss()
     matplotlib.use('Agg')
     plt.plot(loss)
     plt.savefig(imageName)
+    plt.close()
 
     im = Image.open(imageName)
 
