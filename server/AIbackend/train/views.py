@@ -60,13 +60,16 @@ def getTrainStatus(request):
     return HttpResponse("{}".format(str(response)))
 
 def getLoss(request):
+    imageName = 'loss.jpg'
+    if os.path.exists(imageName):
+        os.remove(imageName)
+
     loss = main.getLoss()
     matplotlib.use('Agg')
     plt.plot(loss)
-    os.remove('loss.jpg')
-    plt.savefig('loss.jpg')
+    plt.savefig(imageName)
 
-    im = Image.open('loss.jpg')
+    im = Image.open(imageName)
 
     response = HttpResponse(content_type='image/jpg')
     im.save(response, "JPEG")
