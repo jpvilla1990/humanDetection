@@ -63,6 +63,7 @@ def getLoss(request):
     loss = main.getLoss()
     matplotlib.use('Agg')
     plt.plot(loss)
+    os.remove('loss.jpg')
     plt.savefig('loss.jpg')
 
     im = Image.open('loss.jpg')
