@@ -19,7 +19,6 @@ from utils.threading import ThreadWithTrace
 
 main = Main(category="person")
 
-lr = 0.00001
 def writeLr(lr):
     with open("lr.txt", "w") as f:
         f.write(str(lr))
@@ -46,6 +45,7 @@ def index(request):
 def runTrain(request):
     """
         Method to trigger the training processing receiving as parameter the learning rate
+        ipaddress/startTrain?lr=0.000001
     """
     if request.method == "GET":
         lr_get = float(request.GET["lr"])
