@@ -20,9 +20,18 @@ from utils.threading import ThreadWithTrace
 main = Main(category="person")
 
 lr = 0.00001
+def writeLr(lr):
+    with open("lr.txt", "w") as f:
+        f.write(str(lr))
+
+def readLr(lr):
+    with open("lr.txt", "r") as f:
+        lr = f.readlines
+
+    return float(lr.split("\n")[0])
 
 def runTrainThread():
-    print(lr)
+    lr = readLr()
     main.runTrain(lr=lr)
 
 def initThread():
@@ -40,16 +49,15 @@ def runTrain(request):
     """
     if request.method == "GET":
         lr_get = float(request.GET["lr"])
-        lr = lr_get
-        initThread()
+        writeLr(lr_get)
 
-    if threads[0].is_alive():
-        response = "Training is running"
-    else:
-        initThread()
-        threads[0].start()
-        response = "Training is started"
-    return HttpResponse("{}".format(str(response)))
+        if threads[0].is_alive():
+            response = "Training is running"
+        else:
+            initThread()
+            threads[0].start()
+            response = "Training is started"
+        return HttpResponse("{}".format(str(response)))
 
 def stopTrain(request):
     if threads[0].is_alive():
