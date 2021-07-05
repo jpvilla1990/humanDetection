@@ -135,7 +135,7 @@ def getLoss(request):
             im.close()
 
             if download == "True":
-                response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+                response['Content-Disposition'] = 'attachment; filename="loss.jpg"'
         else:
             for l in loss:
                 with open(lossFile, "a") as f:
