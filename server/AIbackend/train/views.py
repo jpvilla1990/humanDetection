@@ -42,7 +42,7 @@ threads = [ThreadWithTrace(target=runTrainThread)]
 def index(request):
     return HttpResponse("{}".format("Train Index"))
 
-def runTrain(request):
+def startTrain(request):
     """
         Method to trigger the training processing receiving as parameter the learning rate
         ipaddress/startTrain?lr=0.000001
