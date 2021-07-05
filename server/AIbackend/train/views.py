@@ -19,8 +19,10 @@ from utils.threading import ThreadWithTrace
 
 main = Main(category="person")
 
+lr = 0.00001
+
 def runTrainThread():
-    main.runTrain(lr=0.00001)
+    main.runTrain(lr=lr)
 
 def initThread():
     del threads[0]
@@ -32,6 +34,14 @@ def index(request):
     return HttpResponse("{}".format("Train Index"))
 
 def runTrain(request):
+    """
+        Method to trigger the training processing receiving as parameter the learning rate
+    """
+    if request.method == "GET":
+        lr_get = request.GET["lr"]
+        lr = lr_get
+        initThread()
+
     if threads[0].is_alive():
         response = "Training is running"
     else:
