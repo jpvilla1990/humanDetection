@@ -80,7 +80,7 @@ def getTrainStatus(request):
     """
     if request.method == "GET":
         lines = int(request.GET["lines"])
-        download = bool(request.GET["download"])
+        download = request.GET["download"]
         response = []
         if threads[0].is_alive():
             state = "Training Running"
@@ -91,7 +91,7 @@ def getTrainStatus(request):
 
         print(download)
         print(type(download))
-        if download:
+        if download == "True":
             if os.path.exists("log.txt"):
                 os.remove("log.txt")
             for l in log:
@@ -102,7 +102,7 @@ def getTrainStatus(request):
             response['Content-Type'] = 'text/plain'
             response['Content-Disposition'] = 'attachment; filename=log.txt'
 
-        else:
+        elif download == "False":
             response.append(log)
             response = HttpResponse("{}".format(str(response)))
         return response
