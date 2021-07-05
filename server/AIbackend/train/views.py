@@ -76,7 +76,7 @@ def getTrainStatus(request):
     """
         Method to get status of training, parameter lines to indicate the number of lines to obtain, and parameter download to indicate if
         the log should be downloaded as a plain text file
-        ipaddress/getTrainStatus?lines=50?download=True
+        ipaddress/getTrainStatus?lines=50&download=True
     """
     if request.method == "GET":
         lines = int(request.GET["lines"])
@@ -108,20 +108,42 @@ def getTrainStatus(request):
         return response
 
 def getLoss(request):
-    imageName = 'loss.jpg'
-    # if os.path.exists(imageName):
-    #     os.remove(imageName)
+    """
+        Method to obtain the loss either downloading the image or either rendering the image
+        ipaddress/getLoss?download=True&image=True
+    """
+    if request.method == "GET":
+        image = request.GET["lines"]
+        download = request.GET["download"]
+        imageName = 'loss.jpg'
+        lossFile = "loss.txt"
+        if os.path.exists(lossFile):
+            os.remove(lossFile)
 
-    loss = main.getLoss()
-    matplotlib.use('Agg')
-    plt.plot(loss)
-    plt.savefig(imageName)
-    plt.close()
+        loss = main.getLoss()
 
-    im = Image.open(imageName)
+        if image == "True":
+            matplotlib.use('Agg')
+            plt.plot(loss)
+            plt.savefig(imageName)
+            plt.close()
 
-    response = HttpResponse(content_type='image/jpg')
-    im.save(response, "JPEG")
-    im.close()
-    #response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+            im = Image.open(imageName)
+
+            response = HttpResponse(content_type='image/jpg')
+            im.save(response, "JPEG")
+            im.close()
+
+            if download == "True":
+                response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+        else:
+            for l in loss:
+                with open(lossFile, "a") as f:
+                    f.write("{}\n".format(str(l)))
+            response = HttpResponse(open(lossFile, 'rb').read())
+
+            if download == "True":
+                response['Content-Type'] = 'text/plain'
+                response['Content-Disposition'] = 'attachment; filename=loss.txt'
+
     return response
