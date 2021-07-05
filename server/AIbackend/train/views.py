@@ -93,7 +93,7 @@ def getTrainStatus(request):
             if os.path.exists("log.txt"):
                 os.remove("log.txt")
             for l in log:
-                with open("log.txt", "+w") as f:
+                with open("log.txt", "a") as f:
                     f.write("{}\n".format(str(l)))
 
             response = HttpResponse(open("log.txt", 'rb').read())
