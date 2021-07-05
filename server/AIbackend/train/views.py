@@ -113,7 +113,7 @@ def getLoss(request):
         ipaddress/getLoss?download=True&image=True
     """
     if request.method == "GET":
-        image = request.GET["lines"]
+        image = request.GET["image"]
         download = request.GET["download"]
         imageName = 'loss.jpg'
         lossFile = "loss.txt"
