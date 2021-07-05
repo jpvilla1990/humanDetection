@@ -26,7 +26,7 @@ def writeLr(lr):
 
 def readLr():
     with open("lr.txt", "r") as f:
-        lr = f.readlines
+        lr = f.readlines()
 
     return float(lr.split("\n")[0])
 
