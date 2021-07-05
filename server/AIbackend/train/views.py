@@ -24,7 +24,7 @@ def writeLr(lr):
     with open("lr.txt", "w") as f:
         f.write(str(lr))
 
-def readLr(lr):
+def readLr():
     with open("lr.txt", "r") as f:
         lr = f.readlines
 
