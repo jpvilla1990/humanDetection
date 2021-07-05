@@ -89,6 +89,8 @@ def getTrainStatus(request):
         response.append(state)
         log = main.getTrainStatus(lines=lines)
 
+        print(download)
+        print(type(download))
         if download:
             if os.path.exists("log.txt"):
                 os.remove("log.txt")
