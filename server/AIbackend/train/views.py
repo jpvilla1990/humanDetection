@@ -60,6 +60,10 @@ def startTrain(request):
         return HttpResponse("{}".format(str(response)))
 
 def stopTrain(request):
+    """
+        Method to stop training
+        ipaddress/stopTrain
+    """
     if threads[0].is_alive():
         threads[0].kill()
         threads[0].join()
@@ -69,14 +73,37 @@ def stopTrain(request):
     return HttpResponse("{}".format(str(response)))
 
 def getTrainStatus(request):
-    response = []
-    if threads[0].is_alive():
-        state = "Training Running"
-    else:
-        state = "Training Stopped"
-    response.append(state)
-    response.append(main.getTrainStatus(lines=50))
-    return HttpResponse("{}".format(str(response)))
+    """
+        Method to get status of training, parameter lines to indicate the number of lines to obtain, and parameter download to indicate if
+        the log should be downloaded as a plain text file
+        ipaddress/getTrainStatus?lines=50?download=True
+    """
+    if request.method == "GET":
+        lines = int(request.GET["lines"])
+        download = bool(request.GET["download"])
+        response = []
+        if threads[0].is_alive():
+            state = "Training Running"
+        else:
+            state = "Training Stopped"
+        response.append(state)
+        log = main.getTrainStatus(lines=lines)
+
+        if download:
+            if os.path.exists("log.txt"):
+                os.remove("log.txt")
+            for l in log:
+                with open("log.txt", "+w") as f:
+                    f.write("{}\n".format(str(l)))
+
+            response = HttpResponse(open("log.txt", 'rb').read())
+            response['Content-Type'] = 'text/plain'
+            response['Content-Disposition'] = 'attachment; filename=log.txt'
+
+        else:
+            response.append(log)
+            response = HttpResponse("{}".format(str(response)))
+        return response
 
 def getLoss(request):
     imageName = 'loss.jpg'
