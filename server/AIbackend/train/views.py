@@ -28,7 +28,7 @@ def readLr():
     with open("lr.txt", "r") as f:
         lr = f.readlines()
 
-    return float(lr.split("\n")[0])
+    return float(lr[0].split("\n")[0])
 
 def runTrainThread():
     lr = readLr()
