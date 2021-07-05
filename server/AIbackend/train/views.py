@@ -22,6 +22,7 @@ main = Main(category="person")
 lr = 0.00001
 
 def runTrainThread():
+    print(lr)
     main.runTrain(lr=lr)
 
 def initThread():
@@ -38,7 +39,7 @@ def runTrain(request):
         Method to trigger the training processing receiving as parameter the learning rate
     """
     if request.method == "GET":
-        lr_get = request.GET["lr"]
+        lr_get = float(request.GET["lr"])
         lr = lr_get
         initThread()
 
