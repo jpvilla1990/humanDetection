@@ -64,4 +64,6 @@ class Main(object):
         model = SwinBlocks()
         croppedPredictions, dimensions = predictor.predictor(imageFile=imageFile, model=model)
 
-        return croppedPredictions, dimensions
+        prediction = predictor.reconstructImage(croppedPredictions, dimensions)
+
+        return prediction
