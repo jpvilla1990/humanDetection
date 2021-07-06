@@ -132,7 +132,7 @@ class Predictor(object):
         ann_hat = ann_hat.reshape([ann_hat.shape[0], 1, dimX, dimY])
         ann_hat = torch.nn.functional.interpolate(ann_hat, (self.__imageSize[0], self.__imageSize[1]))
 
-        return croppedPrediction, dimensions
+        return ann_hat, dimensions
 
     def reconstructImage(self, croppedImage, dimensions):
         """
