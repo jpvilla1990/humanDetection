@@ -125,6 +125,13 @@ class Predictor(object):
 
         croppedPrediction = torch.sigmoid(croppedPrediction)
 
+        ann_hat = torch.flatten(croppedPrediction, start_dim=1)
+        dimX = self.__imageSize[1]
+        dimY = int(ann_hat.shape[1] / dimX)
+
+        ann_hat = ann_hat.reshape([ann_hat.shape[0], 1, dimX, dimY])
+        ann_hat = torch.nn.functional.interpolate(ann_hat, (self.__imageSize[0], self.__imageSize[1]))
+
         return croppedPrediction, dimensions
 
     def reconstructImage(self, croppedImage, dimensions):
