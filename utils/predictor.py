@@ -54,7 +54,7 @@ class Predictor(object):
             Load an Image from disk to torch
             returns a normalized image
         """
-        image = Image.open(imagePath)
+        image = Image.open(os.path.join(self.__predictionsPath), imagePath)
         imageTorch = self.__toTensor(image)
 
         return imageTorch
