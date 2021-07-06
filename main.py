@@ -2,6 +2,7 @@ from utils.dataloader import Dataloader
 from utils.dataPreprocessing import DataPreprocessing
 from utils.model import SwinBlocks
 from utils.train import Train
+from utils.predictor import Predictor
 
 class Main(object):
     def __init__(self, category="person"):
@@ -54,3 +55,11 @@ class Main(object):
         scale = len(loss) / 100
         lossScaled = self.__rescaleVector(loss, scale)
         return lossScaled
+
+    def runPrediction(self, imageFile):
+        """
+            Method to execute the prediction of one image
+        """
+        predictor = Predictor()
+        model = SwinBlocks()
+        croppedPredictions, dimensions = predictor.predictor(imageFile=imageFile, model=model)
