@@ -119,7 +119,7 @@ class Predictor(object):
 
         parameters = self.__loadPickle(os.path.join(self.__pickleModelsPath, modelFile))
 
-        img = img.permute(0,2,3,1)
+        img = imagesCropped.permute(0,2,3,1)
 
         croppedPrediction = model.forward(img, parameters)
 
