@@ -191,6 +191,11 @@ class Predictor(object):
                     elif j == cropsWidth:
                         targetImage[0][yInit: yEnd][desiredWidth - self.__imageSize[1]: desiredWidth] = croppedImage[cropIndex]
                     else:
+                        print(yInit)
+                        print(yEnd)
+                        print(xInit)
+                        print(xEnd)
+                        print(targetImage.shape)
                         targetImage[0][yInit: yEnd][xInit: xEnd] = croppedImage[cropIndex]
 
                     cropIndex += 1
