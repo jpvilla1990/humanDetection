@@ -162,20 +162,20 @@ class Predictor(object):
                 xInit = i * self.__imageSize[1]
                 xEnd = (i + 1) * self.__imageSize[1]
                 croppedResized = transforms.functional.resize(croppedImage[i], [desiredHeight, self.__imageSize[1]])
-                targetImage[0][:][xInit: xEnd] = croppedResized
+                targetImage[0, :, xInit: xEnd] = croppedResized
 
             croppedResized = transforms.functional.resize(croppedImage[cropsWidth], [desiredHeight, self.__imageSize[1]])
-            targetImage[0][:][desiredWidth - self.__imageSize[1]: desiredWidth] = croppedResized
+            targetImage[0, :, desiredWidth - self.__imageSize[1]: desiredWidth] = croppedResized
 
         elif cropsHeight > 1 and cropsWidth == 1:
             for i in range(cropsHeight - 1):
                 yInit = i * self.__imageSize[0]
                 yEnd = (i + 1) * self.__imageSize[0]
                 croppedResized = transforms.functional.resize(croppedImage[i], [self.__imageSize[0], desiredWidth])
-                targetImage[0][yInit: yEnd][:] = croppedResized
+                targetImage[0, yInit: yEnd, :] = croppedResized
 
             croppedResized = transforms.functional.resize(croppedImage[cropsHeight], [self.__imageSize[0], desiredWidth])
-            targetImage[0][desiredHeight - self.__imageSize[0]:desiredHeight][:] = croppedResized
+            targetImage[0, desiredHeight - self.__imageSize[0]:desiredHeight, :] = croppedResized
 
         elif cropsHeight > 1 and cropsWidth > 1:
             cropIndex = 0
@@ -187,16 +187,11 @@ class Predictor(object):
                     xEnd = (j + 1) * self.__imageSize[1]
 
                     if i == cropsHeight:
-                        targetImage[0][desiredHeight - self.__imageSize[0]: desiredHeight][xInit: xEnd] = croppedImage[cropIndex]
+                        targetImage[0, desiredHeight - self.__imageSize[0]: desiredHeight, xInit: xEnd] = croppedImage[cropIndex]
                     elif j == cropsWidth:
-                        targetImage[0][yInit: yEnd][desiredWidth - self.__imageSize[1]: desiredWidth] = croppedImage[cropIndex]
+                        targetImage[0, yInit: yEnd, desiredWidth - self.__imageSize[1]: desiredWidth] = croppedImage[cropIndex]
                     else:
-                        print(yInit)
-                        print(yEnd)
-                        print(xInit)
-                        print(xEnd)
-                        print(targetImage.shape)
-                        targetImage[0][yInit: yEnd][xInit: xEnd] = croppedImage[cropIndex]
+                        targetImage[0, yInit: yEnd, xInit: xEnd] = croppedImage[cropIndex]
 
                     cropIndex += 1
 
