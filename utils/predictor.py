@@ -186,6 +186,9 @@ class Predictor(object):
                     xInit = j * self.__imageSize[1]
                     xEnd = (j + 1) * self.__imageSize[1]
 
+                    print(i)
+                    print(j)
+
                     if i == cropsHeight - 1:
                         targetImage[0, desiredHeight - self.__imageSize[0]: desiredHeight, xInit: xEnd] = croppedImage[cropIndex]
                     elif j == cropsWidth - 1:
