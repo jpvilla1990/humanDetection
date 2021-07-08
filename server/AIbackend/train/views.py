@@ -152,7 +152,7 @@ def getLoss(request):
 def predictImage(request):
     """
         Method to obtain the a prediction either by an URL image or uploading the image itself
-        ipaddress/predictImage?imageURL=True&image=True&download=True
+        ipaddress/predictImage?imageURL=url&image=image.jpg&download=True
     """
     dirpath = os.path.dirname(__file__)
     if request.method == "GET":
@@ -165,7 +165,7 @@ def predictImage(request):
             os.remove(imageName)
         urllib.request.urlretrieve(imageURL, imageName)
 
-        im = main.runPrediction(main)
+        im = main.runPrediction(imageName)
 
         response = HttpResponse(content_type='image/jpg')
         im.save(response, "JPEG")
