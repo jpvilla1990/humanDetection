@@ -59,6 +59,16 @@ class Predictor(object):
 
         return imageTorch
 
+    def __loadImageAbsPath(self, imagePath):
+        """
+            Load an Image from disk to torch
+            returns a normalized image
+        """
+        image = Image.open(imagePath)
+        imageTorch = self.__toTensor(image)
+
+        return imageTorch
+
     def __cropImage(self, imageTorch):
         """
             Method to crop image in pieces with the desired size
@@ -107,7 +117,7 @@ class Predictor(object):
             Method to predict mask of an image
             return predictions, [height, width]
         """
-        imageTorch = self.__loadImage(imageFile)
+        imageTorch = self.__loadImageAbsPath(imageFile)
         if imageTorch.shape[0] != 3:
             newImageTorch = torch.ones([3, imageTorch.shape[1], imageTorch.shape[2]])
             newImageTorch[0] = imageTorch

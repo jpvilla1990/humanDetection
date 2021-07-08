@@ -8,4 +8,5 @@ urlpatterns = [
     path('stopTrain', views.stopTrain, name='stopTrain'),
     path('getTrainStatus', views.getTrainStatus, name='getTrainStatus'),
     path('getLoss', views.getLoss, name='getLoss'),
+    path('predictImage', views.predictImage, name='predictImage'),
 ]

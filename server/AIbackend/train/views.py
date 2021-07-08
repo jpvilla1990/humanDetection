@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import urllib.request
 
 import sys
 import os
@@ -145,5 +146,32 @@ def getLoss(request):
             if download == "True":
                 response['Content-Type'] = 'text/plain'
                 response['Content-Disposition'] = 'attachment; filename=loss.txt'
+
+    return response
+
+def predictImage(request):
+    """
+        Method to obtain the a prediction either by an URL image or uploading the image itself
+        ipaddress/predictImage?imageURL=True&image=True&download=True
+    """
+    dirpath = os.path.dirname(__file__)
+    if request.method == "GET":
+        imageURL = request.GET["imageURL"]
+        image = request.GET["image"]
+        download = request.GET["download"]
+
+        imageName = os.path.join(dirpath, 'sample.jpg')
+        if os.path.exists(imageName):
+            os.remove(imageName)
+        urllib.request.urlretrieve(imageURL, imageName)
+
+        im = main.runPrediction(main)
+
+        response = HttpResponse(content_type='image/jpg')
+        im.save(response, "JPEG")
+        im.close()
+
+        if download == "True":
+            response['Content-Disposition'] = 'attachment; filename="loss.jpg"'
 
     return response
