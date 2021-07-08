@@ -153,6 +153,7 @@ def predictImage(request):
     """
         Method to obtain the a prediction either by an URL image or uploading the image itself
         ipaddress/predictImage?imageURL=url&image=image.jpg&download=True
+        http://192.168.178.87:8000/train/predictImage?imageURL=https://res.cloudinary.com/upskilled/image/fetch/w_660,h_440,c_crop,c_fill,g_face:auto,f_auto/https://www.upskilled.edu.au/getmedia%2F69cf3c32-e268-469e-887c-5e152369a5bd%2Fhero-image-people-persons.jpg%3B.aspx%3Fwidth%3D1000%26height%3D667%26ext%3D.jpg&image=image.jpg&download=False
     """
     dirpath = os.path.dirname(__file__)
     if request.method == "GET":

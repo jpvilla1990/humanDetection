@@ -59,6 +59,7 @@ class Main(object):
     def runPrediction(self, imageFile):
         """
             Method to execute the prediction of one image
+            returns PIL image
         """
         predictor = Predictor()
         model = SwinBlocks()
@@ -66,4 +67,6 @@ class Main(object):
 
         prediction = predictor.reconstructImage(croppedPredictions, dimensions)
 
-        return prediction
+        predictionPIL = predictor.postProcessImage(prediction)
+
+        return predictionPIL

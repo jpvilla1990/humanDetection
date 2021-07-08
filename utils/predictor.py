@@ -208,3 +208,10 @@ class Predictor(object):
                     cropIndex += 1
 
         return targetImage
+
+    def postProcessImage(self, prediction):
+        """
+            Method to convert torch to PIL and do postprocessing on the image
+        """
+        image = self.__toPIL(prediction)
+        return image
