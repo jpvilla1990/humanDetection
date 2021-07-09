@@ -131,18 +131,23 @@ class Predictor(object):
 
         img = imagesCropped.permute(0,2,3,1)
 
-        croppedPrediction = model.forward(img, parameters)
 
-        croppedPrediction = torch.sigmoid(croppedPrediction)
+        croppedPrediction = torch.ones([img.shape[0], 1, self.__imageSize[0], self.__imageSize[1]])
+        for i in range(len(img)):
+            sampleImage = torch.unsqueeze(img[i], 0)
+            croppedPrediction = model.forward(sampleImage, parameters)
+            croppedPrediction = torch.sigmoid(croppedPrediction)
 
-        ann_hat = torch.flatten(croppedPrediction, start_dim=1)
-        dimX = self.__imageSize[1]
-        dimY = int(ann_hat.shape[1] / dimX)
+            ann_hat = torch.flatten(croppedPrediction, start_dim=1)
+            dimX = self.__imageSize[1]
+            dimY = int(ann_hat.shape[1] / dimX)
 
-        ann_hat = ann_hat.reshape([ann_hat.shape[0], 1, dimX, dimY])
-        ann_hat = torch.nn.functional.interpolate(ann_hat, (self.__imageSize[0], self.__imageSize[1]))
+            ann_hat = ann_hat.reshape([ann_hat.shape[0], 1, dimX, dimY])
+            ann_hat = torch.nn.functional.interpolate(ann_hat, (self.__imageSize[0], self.__imageSize[1]))
 
-        return ann_hat, dimensions
+            croppedPrediction[i] = ann_hat        
+
+        return croppedPrediction, dimensions
 
     def reconstructImage(self, croppedImage, dimensions):
         """
@@ -213,5 +218,6 @@ class Predictor(object):
         """
             Method to convert torch to PIL and do postprocessing on the image
         """
+        prediction = torch.round(prediction)
         image = self.__toPIL(prediction)
         return image
