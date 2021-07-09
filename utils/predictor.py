@@ -135,10 +135,10 @@ class Predictor(object):
         croppedPrediction = torch.ones([img.shape[0], 1, self.__imageSize[0], self.__imageSize[1]])
         for i in range(len(img)):
             sampleImage = torch.unsqueeze(img[i], 0)
-            croppedPrediction = model.forward(sampleImage, parameters)
-            croppedPrediction = torch.sigmoid(croppedPrediction)
+            ann_hat = model.forward(sampleImage, parameters)
+            ann_hat = torch.sigmoid(ann_hat)
 
-            ann_hat = torch.flatten(croppedPrediction, start_dim=1)
+            ann_hat = torch.flatten(ann_hat, start_dim=1)
             dimX = self.__imageSize[1]
             dimY = int(ann_hat.shape[1] / dimX)
 
