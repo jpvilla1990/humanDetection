@@ -133,10 +133,9 @@ class Predictor(object):
             newImageTorch[2] = imageTorch
             imageTorch = newImageTorch
 
-        print(imageTorch.shape)
-        if imageTorch.shape[2] > 768:
+        if imageTorch.shape[1] > 768:
             imageTorch = torch.nn.functional.interpolate(imageTorch, (self.__maxSize[0], imageTorch.shape[2]))
-        if imageTorch.shape[3] > 768:
+        if imageTorch.shape[2] > 768:
             imageTorch = torch.nn.functional.interpolate(imageTorch, (imageTorch.shape[1], self.__maxSize[1]))
 
         imagesCropped, dimensions = self.__cropImage(imageTorch)
