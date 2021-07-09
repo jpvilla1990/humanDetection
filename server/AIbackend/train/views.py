@@ -164,6 +164,10 @@ def predictImage(request):
         imageName = os.path.join(dirpath, 'sample.jpg')
         if os.path.exists(imageName):
             os.remove(imageName)
+
+        opener=urllib.request.build_opener()
+        opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+        urllib.request.install_opener(opener)
         urllib.request.urlretrieve(imageURL, imageName)
 
         im = main.runPrediction(imageName)
