@@ -18,6 +18,7 @@ class Predictor(object):
         self.__toTensor = transforms.ToTensor()
         self.__createPaths()
         self.__lastTime = None
+        self.__maxSize = [768, 768]
 
     def __createFolder(self, folder):
         """
@@ -133,10 +134,9 @@ class Predictor(object):
             imageTorch = newImageTorch
 
         if imageTorch.shape[2] > 768:
-            imageTorch = torch.nn.functional.interpolate(imageTorch, 768, imageTorch[3])
-
+            imageTorch = torch.nn.functional.interpolate(imageTorch, (self.__maxSize[0], imageTorch[2]))
         if imageTorch.shape[3] > 768:
-            imageTorch = torch.nn.functional.interpolate(imageTorch, imageTorch[2], 768)
+            imageTorch = torch.nn.functional.interpolate(imageTorch, (imageTorch[1], self.__maxSize[1]))
 
         imagesCropped, dimensions = self.__cropImage(imageTorch)
 
