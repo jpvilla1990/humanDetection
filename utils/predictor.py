@@ -18,7 +18,7 @@ class Predictor(object):
         self.__toTensor = transforms.ToTensor()
         self.__createPaths()
         self.__lastTime = None
-        self.__maxSize = [768, 768]
+        self.__maxSize = [1024, 1024]
 
     def __createFolder(self, folder):
         """
