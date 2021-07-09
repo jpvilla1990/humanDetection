@@ -157,9 +157,9 @@ def predictImage(request):
     """
     dirpath = os.path.dirname(__file__)
     if request.method == "GET":
-        imageURL = request.GET["imageURL"]
-        image = request.GET["image"]
-        download = request.GET["download"]
+        imageURL = urllib.request.unquote(request.GET["imageURL"])
+        image = urllib.request.unquote(request.GET["image"])
+        download = urllib.request.unquote(request.GET["download"])
 
         imageName = os.path.join(dirpath, 'sample.jpg')
         if os.path.exists(imageName):
