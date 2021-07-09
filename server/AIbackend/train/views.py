@@ -157,7 +157,7 @@ def predictImage(request):
     """
     dirpath = os.path.dirname(__file__)
     if request.method == "GET":
-        imageURL = request.GET["imageURL"]
+        imageURL = request.GET["imageURL"].split('"')[1]
         image = request.GET["image"]
         download = request.GET["download"]
 
