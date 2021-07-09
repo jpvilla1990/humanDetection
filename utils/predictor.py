@@ -19,7 +19,6 @@ class Predictor(object):
         self.__createPaths()
         self.__lastTime = None
         self.__maxSize = 512
-        self.__threshold = 0.2
 
     def __createFolder(self, folder):
         """
@@ -232,6 +231,6 @@ class Predictor(object):
         """
             Method to convert torch to PIL and do postprocessing on the image
         """
-        prediction = torch.nn.functional.threshold(prediction, self.__threshold)
+        #prediction = torch.round(prediction)
         image = self.__toPIL(prediction)
         return image
