@@ -134,13 +134,13 @@ class Predictor(object):
             imageTorch = newImageTorch
 
         if imageTorch.shape[1] > imageTorch.shape[2]:
-            maxSize = [self.__maxSize, 1024]
+            maxSize = [self.__maxSize, int(self.__maxSize * (imageTorch.shape[2] / imageTorch.shape[1]))]
         else:
-            maxSize = [1024, self.__maxSize]
+            maxSize = [int(self.__maxSize * (imageTorch.shape[1] / imageTorch.shape[2])), self.__maxSize]
 
-        if imageTorch.shape[1] > 768:
+        if imageTorch.shape[1] > maxSize[0]:
             imageTorch = transforms.functional.resize(imageTorch, (maxSize[0], imageTorch.shape[2]))
-        if imageTorch.shape[2] > 768:
+        if imageTorch.shape[2] > maxSize[1]:
             imageTorch = transforms.functional.resize(imageTorch, (imageTorch.shape[1], maxSize[1]))
 
         imagesCropped, dimensions = self.__cropImage(imageTorch)
