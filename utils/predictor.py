@@ -231,6 +231,7 @@ class Predictor(object):
         """
             Method to convert torch to PIL and do postprocessing on the image
         """
+        transforms.functional.autocontrast(prediction)
         prediction = torch.round(prediction)
         image = self.__toPIL(prediction)
         return image
