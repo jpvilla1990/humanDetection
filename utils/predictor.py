@@ -118,12 +118,25 @@ class Predictor(object):
             return predictions, [height, width]
         """
         imageTorch = self.__loadImageAbsPath(imageFile)
-        if imageTorch.shape[0] != 3:
+        if imageTorch.shape[0] != 3 and len(imageTorch.shape) == 3:
             newImageTorch = torch.ones([3, imageTorch.shape[1], imageTorch.shape[2]])
             newImageTorch[0] = imageTorch
             newImageTorch[1] = imageTorch
             newImageTorch[2] = imageTorch
             imageTorch = newImageTorch
+
+        elif len(imageTorch.shape) == 2:
+            newImageTorch = torch.ones([3, imageTorch.shape[0], imageTorch.shape[1]])
+            newImageTorch[0] = imageTorch
+            newImageTorch[1] = imageTorch
+            newImageTorch[2] = imageTorch
+            imageTorch = newImageTorch
+
+        if imageTorch.shape[2] > 768:
+            imageTorch = torch.nn.functional.interpolate(imageTorch, 768, imageTorch[3])
+
+        if imageTorch.shape[3] > 768:
+            imageTorch = torch.nn.functional.interpolate(imageTorch, imageTorch[2], 768)
 
         imagesCropped, dimensions = self.__cropImage(imageTorch)
 
@@ -131,23 +144,18 @@ class Predictor(object):
 
         img = imagesCropped.permute(0,2,3,1)
 
+        croppedPrediction = model.forward(img, parameters)
 
-        croppedPrediction = torch.ones([img.shape[0], 1, self.__imageSize[0], self.__imageSize[1]])
-        for i in range(len(img)):
-            sampleImage = torch.unsqueeze(img[i], 0)
-            ann_hat = model.forward(sampleImage, parameters)
-            ann_hat = torch.sigmoid(ann_hat)
+        croppedPrediction = torch.sigmoid(croppedPrediction)
 
-            ann_hat = torch.flatten(ann_hat, start_dim=1)
-            dimX = self.__imageSize[1]
-            dimY = int(ann_hat.shape[1] / dimX)
+        ann_hat = torch.flatten(croppedPrediction, start_dim=1)
+        dimX = self.__imageSize[1]
+        dimY = int(ann_hat.shape[1] / dimX)
 
-            ann_hat = ann_hat.reshape([ann_hat.shape[0], 1, dimX, dimY])
-            ann_hat = torch.nn.functional.interpolate(ann_hat, (self.__imageSize[0], self.__imageSize[1]))
+        ann_hat = ann_hat.reshape([ann_hat.shape[0], 1, dimX, dimY])
+        ann_hat = torch.nn.functional.interpolate(ann_hat, (self.__imageSize[0], self.__imageSize[1]))
 
-            croppedPrediction[i] = ann_hat        
-
-        return croppedPrediction, dimensions
+        return ann_hat, dimensions
 
     def reconstructImage(self, croppedImage, dimensions):
         """
