@@ -133,6 +133,7 @@ class Predictor(object):
             newImageTorch[2] = imageTorch
             imageTorch = newImageTorch
 
+        print(imageTorch.shape)
         if imageTorch.shape[2] > 768:
             imageTorch = torch.nn.functional.interpolate(imageTorch, (self.__maxSize[0], imageTorch.shape[2]))
         if imageTorch.shape[3] > 768:
