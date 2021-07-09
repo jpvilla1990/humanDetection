@@ -19,7 +19,7 @@ class Predictor(object):
         self.__createPaths()
         self.__lastTime = None
         self.__maxSize = 512
-        self.__threshold = 0.2
+        self.__threshold = 0.5
 
     def __createFolder(self, folder):
         """
