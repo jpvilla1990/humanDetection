@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 
 import sys
@@ -149,6 +150,7 @@ def getLoss(request):
 
     return response
 
+@csrf_exempt
 def predictImage(request):
     """
         Method to obtain the a prediction either by an URL image or uploading the image itself
