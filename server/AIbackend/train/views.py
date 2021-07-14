@@ -165,7 +165,6 @@ def predictImage(request):
         if os.path.exists(imageName):
             os.remove(imageName)
 
-        print(imageURL)
         opener=urllib.request.build_opener()
         opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
         urllib.request.install_opener(opener)
@@ -179,5 +178,11 @@ def predictImage(request):
 
         if download == "True":
             response['Content-Disposition'] = 'attachment; filename="loss.jpg"'
+
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        #image = urllib.request.unquote(request.POST.get["image"])
+        response = HttpResponse("{}".format(str(data)))
 
     return response
