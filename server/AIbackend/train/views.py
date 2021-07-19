@@ -183,8 +183,8 @@ def predictImage(request):
 
     if request.method == "POST":
         data = request.POST
-        print(data)
-        #image = urllib.request.unquote(request.POST.get["image"])
-        response = HttpResponse("{}".format(str(data)))
+        image = urllib.request.unquote(request.POST.get["image"])
+        print(image)
+        response = HttpResponse(image)
 
     return response
