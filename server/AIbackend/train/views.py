@@ -182,9 +182,9 @@ def predictImage(request):
             response['Content-Disposition'] = 'attachment; filename="loss.jpg"'
 
     if request.method == "POST":
-        #data = request.POST
+        data = request.POST
         image = request.POST.get("image")
-        print(image)
+        print(data)
         response = HttpResponse(image)
 
     return response
