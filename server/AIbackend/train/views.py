@@ -188,7 +188,6 @@ def predictImage(request):
         intArray = []
         for i in range(1, len(imageArray)):
             intArray.append(int(imageArray[i]))
-        #predictedImage = main.runPrediction(image)
         byteArray = bytearray(intArray)
 
         imageName = os.path.join(dirpath, 'prediction.jpg')
@@ -201,8 +200,11 @@ def predictImage(request):
         f.close()
 
         image = Image.open(imageName)
+
+        predictedImage = main.runPrediction(image)
+
         response = HttpResponse(content_type='image/jpg')
-        image.save(response, "JPEG")
-        image.close()
+        predictedImage.save(response, "JPEG")
+        predictedImage.close()
 
     return response
