@@ -199,9 +199,7 @@ def predictImage(request):
         f.write(byteArray)
         f.close()
 
-        image = Image.open(imageName)
-
-        predictedImage = main.runPrediction(image)
+        predictedImage = main.runPrediction(imageName)
 
         response = HttpResponse(content_type='image/jpg')
         predictedImage.save(response, "JPEG")
