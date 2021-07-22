@@ -188,7 +188,7 @@ def predictImage(request):
         intArray = []
         for i in range(1, len(imageArray)):
             intArray.append(int(imageArray[i]))
-        predictedImage = main.runPrediction(image)
+        #predictedImage = main.runPrediction(image)
         byteArray = bytearray(intArray)
 
         imageName = os.path.join(dirpath, 'sample.jpg')
