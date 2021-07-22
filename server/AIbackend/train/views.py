@@ -191,7 +191,11 @@ def predictImage(request):
         #predictedImage = main.runPrediction(image)
         byteArray = bytearray(intArray)
 
-        imageName = os.path.join(dirpath, 'sample.jpg')
+        imageName = os.path.join(dirpath, 'prediction.jpg')
+
+        if os.path.exists(imageName):
+            os.remove(imageName)
+
         f = open(imageName,"ab")
         f.write(byteArray)
         f.close()
