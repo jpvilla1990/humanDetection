@@ -183,8 +183,21 @@ def predictImage(request):
 
     if request.method == "POST":
         data = request.POST
-        image = request.POST.get("image")
-        print(data)
+        imageBytes = request.POST.get("image")
+        imageArray = imageBytes.split("_")
+        intArray = []
+        for i in range(1, len(imageArray)):
+            intArray.append(int(imageArray[i]))
+        predictedImage = main.runPrediction(image)
+        byteArray = bytearray(intArray)
+
+        imageName = os.path.join(dirpath, 'sample.jpg')
+        f = open(imageName,"ab")
+        f.write(byteArray)
+        f.close()
+
+        image = Image.open(imageName)
+        
         response = HttpResponse(image)
 
     return response
