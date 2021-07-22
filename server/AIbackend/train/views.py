@@ -204,7 +204,5 @@ def predictImage(request):
         response = HttpResponse(content_type='image/jpg')
         image.save(response, "JPEG")
         image.close()
-        
-        response = HttpResponse(image)
 
     return response
